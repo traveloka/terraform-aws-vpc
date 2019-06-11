@@ -11,6 +11,8 @@ provider "random" {
 locals {
   max_byte_length = 8 # max bytes of random id to use as unique suffix. 16 hex chars, each byte takes 2 hex chars
 
+  managed_by = "terraform"
+
   ## Cloudwatch Log Group for VPC Flow Logs
   log_group_name_max_length      = 512
   log_group_name_format          = "/aws/vpc-flow-logs/%s-"
@@ -45,7 +47,7 @@ resource "aws_vpc" "this" {
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
     Description   = "${var.environment} VPC for ${var.product_domain} product domain"
-    ManagedBy     = "Terraform"
+    ManagedBy     = "${local.managed_by}"
   }
 }
 
@@ -65,7 +67,7 @@ resource "aws_subnet" "public" {
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
     Description   = "Public subnet for ${element(var.subnet_availability_zones, count.index)} AZ on ${var.vpc_name} VPC"
-    ManagedBy     = "Terraform"
+    ManagedBy     = "${local.managed_by}"
   }
 }
 
@@ -85,7 +87,7 @@ resource "aws_subnet" "app" {
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
     Description   = "Application subnet for ${element(var.subnet_availability_zones, count.index)} AZ on ${var.vpc_name} VPC"
-    ManagedBy     = "Terraform"
+    ManagedBy     = "${local.managed_by}"
   }
 }
 
@@ -105,7 +107,7 @@ resource "aws_subnet" "data" {
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
     Description   = "Data subnet for ${element(var.subnet_availability_zones, count.index)} AZ on ${var.vpc_name} VPC"
-    ManagedBy     = "Terraform"
+    ManagedBy     = "${local.managed_by}"
   }
 }
 
@@ -124,7 +126,7 @@ resource "aws_db_subnet_group" "this" {
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
     Description   = "Default DB Subnet Group on ${var.vpc_name} VPC"
-    ManagedBy     = "Terraform"
+    ManagedBy     = "${local.managed_by}"
   }
 }
 
@@ -153,7 +155,7 @@ resource "aws_redshift_subnet_group" "this" {
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
     Description   = "Default Redshift Subnet Group on ${var.vpc_name} VPC"
-    ManagedBy     = "Terraform"
+    ManagedBy     = "${local.managed_by}"
   }
 }
 
@@ -166,7 +168,7 @@ resource "aws_internet_gateway" "this" {
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
     Description   = "Internet gateway for ${var.vpc_name} VPC"
-    ManagedBy     = "Terraform"
+    ManagedBy     = "${local.managed_by}"
   }
 }
 
@@ -183,7 +185,7 @@ resource "aws_eip" "nat" {
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
     Description   = "NAT Gateway's Elastic IP for ${element(var.subnet_availability_zones, count.index)} AZ on ${var.vpc_name} VPC"
-    ManagedBy     = "Terraform"
+    ManagedBy     = "${local.managed_by}"
   }
 }
 
@@ -208,7 +210,7 @@ resource "aws_nat_gateway" "this" {
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
     Description   = "NAT Gateway for ${element(var.subnet_availability_zones, count.index)} AZ on ${var.vpc_name} VPC"
-    ManagedBy     = "Terraform"
+    ManagedBy     = "${local.managed_by}"
   }
 }
 
@@ -222,7 +224,7 @@ resource "aws_default_route_table" "this" {
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
     Description   = "Default route table for ${var.vpc_name} VPC"
-    ManagedBy     = "Terraform"
+    ManagedBy     = "${local.managed_by}"
   }
 }
 
@@ -237,7 +239,7 @@ resource "aws_route_table" "public" {
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
     Description   = "Route table for public subnet on ${var.vpc_name} VPC"
-    ManagedBy     = "Terraform"
+    ManagedBy     = "${local.managed_by}"
   }
 }
 
@@ -277,7 +279,7 @@ resource "aws_route_table" "app" {
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
     Description   = "Route table for app subnet in ${element(var.subnet_availability_zones, count.index)} AZ of ${var.vpc_name} VPC"
-    ManagedBy     = "Terraform"
+    ManagedBy     = "${local.managed_by}"
   }
 }
 
@@ -322,7 +324,7 @@ resource "aws_route_table" "data" {
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
     Description   = "Route table for data subnet in ${element(var.subnet_availability_zones, count.index)} AZ of ${var.vpc_name} VPC"
-    ManagedBy     = "Terraform"
+    ManagedBy     = "${local.managed_by}"
   }
 }
 
@@ -450,7 +452,7 @@ resource "aws_default_vpc_dhcp_options" "this" {
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
     Description   = "Default AWS DHCP options set for ${var.vpc_name} VPC"
-    ManagedBy     = "Terraform"
+    ManagedBy     = "${local.managed_by}"
   }
 }
 
@@ -481,7 +483,7 @@ resource "aws_default_network_acl" "this" {
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
     Description   = "Default network ACL for ${var.vpc_name} VPC"
-    ManagedBy     = "Terraform"
+    ManagedBy     = "${local.managed_by}"
   }
 
   lifecycle {
@@ -500,7 +502,7 @@ resource "aws_default_security_group" "this" {
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
     Description   = "Default security group for ${var.vpc_name} VPC"
-    ManagedBy     = "Terraform"
+    ManagedBy     = "${local.managed_by}"
   }
 }
 
@@ -548,7 +550,7 @@ resource "aws_cloudwatch_log_group" "flow_logs" {
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
     Description   = "VPC Flow Logs for ${var.vpc_name} VPC"
-    ManagedBy     = "Terraform"
+    ManagedBy     = "${local.managed_by}"
   }
 }
 
