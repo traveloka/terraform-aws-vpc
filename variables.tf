@@ -20,17 +20,17 @@ variable "vpc_cidr_block" {
 
 variable "vpc_enable_dns_support" {
   description = "A boolean flag to enable/disable DNS support in the VPC. Defaults true."
-  default     = true
+  default     = "true"
 }
 
 variable "vpc_enable_dns_hostnames" {
   description = "A boolean flag to enable/disable DNS hostnames in the VPC. Defaults true."
-  default     = true
+  default     = "true"
 }
 
 variable "vpc_multi_tier" {
   description = "Whether this VPC should have 3 tiers. True means 3-tier, false means single-tier. Defaults true. Recommended value is true."
-  default     = true
+  default     = "true"
 }
 
 variable "subnet_availability_zones" {
@@ -46,5 +46,5 @@ variable "subnet_availability_zones" {
 
 variable "flow_logs_log_group_retention_period" {
   description = "Specifies the number of days you want to retain log events in the specified log group."
-  default     = 0
+  default     = "14"
 }
