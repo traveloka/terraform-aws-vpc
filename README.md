@@ -1,18 +1,17 @@
-terraform-aws-vpc
-=================
+# terraform-aws-vpc
 
 Terraform module to create all mandatory VPC components.
 
-This module supports either single-tier (only pubilc subnet) or multi-tier (public-app-data subnets) VPC creation.
+This module supports either single-tier (only public subnet) or multi-tier (public-app-data subnets) VPC creation.
 This module supports only up to 4 AZs.
 
-Usage
------
+## Usage
 
 ```hcl
 module "abc_dev" {
-  source = "github.com/traveloka/terraform-aws-vpc.git?ref=0.0.1"
-
+  source  = "traveloka/vpc/aws"
+  version = "v0.2.3"
+  
   product_domain = "abc"
   environment    = "dev"
 
@@ -21,14 +20,14 @@ module "abc_dev" {
 }
 ```
 
-Single-Tier VPC
----------------
+### Single-Tier VPC
 
 In some cases, you will need a VPC which has only public subnets.
 
 ```hcl
 module "abc_dev" {
-  source = "github.com/traveloka/terraform-aws-vpc.git?ref=0.0.1"
+  source  = "traveloka/vpc/aws"
+  version = "v0.2.3"
 
   # you only need to add this line
   vpc_multi_tier = false 
@@ -43,23 +42,24 @@ Currrently Terraform does not allow `count` inside `output` block, so now it is 
 But don't worry, the errors have nothing to do with the stacks/resources/infrastructures that you created.
 Just re-execute `terraform apply` and you will be fine.
 
-Terraform Version
------------------
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## Terraform Version
 
 This module was created using Terraform 0.11.4. 
-So to be more safe, Terraform version 0.11.4 or newer is required to use this module.
+Tested working on Terraform 0.11.14
+At the moment, this module is not supported on Terraform 0.12
 
-Examples
---------
+## Examples
 
 * [Multi-Tier VPC](https://github.com/traveloka/terraform-aws-vpc/tree/master/examples/multi-tier)
 
-Authors
--------
+## Author
 
 * [Rafi Kurnia Putra](https://github.com/rafikurnia)
 
-License
--------
+## License
 
 Apache 2 Licensed. See LICENSE for full details.

@@ -25,32 +25,32 @@ output "region_ec2_endpoint" {
 
 output "vpc_id" {
   description = "The ID of the VPC."
-  value       = "${element(concat(aws_vpc.this.*.id, list("")), 0)}"
+  value       = "${element(concat(aws_vpc.this.*.id, list("")), "0")}"
 }
 
 output "vpc_cidr_block" {
   description = "The CIDR block of the VPC."
-  value       = "${element(concat(aws_vpc.this.*.cidr_block, list("")), 0)}"
+  value       = "${element(concat(aws_vpc.this.*.cidr_block, list("")), "0")}"
 }
 
 output "vpc_instance_tenancy" {
   description = "Tenancy of instances spin up within VPC."
-  value       = "${element(concat(aws_vpc.this.*.instance_tenancy, list("")), 0)}"
+  value       = "${element(concat(aws_vpc.this.*.instance_tenancy, list("")), "0")}"
 }
 
 output "vpc_enable_dns_support" {
   description = "Whether or not the VPC has DNS support."
-  value       = "${element(concat(aws_vpc.this.*.enable_dns_support, list("")), 0)}"
+  value       = "${element(concat(aws_vpc.this.*.enable_dns_support, list("")), "0")}"
 }
 
 output "vpc_enable_dns_hostnames" {
   description = "Whether or not the VPC has DNS hostname support."
-  value       = "${element(concat(aws_vpc.this.*.enable_dns_hostnames, list("")), 0)}"
+  value       = "${element(concat(aws_vpc.this.*.enable_dns_hostnames, list("")), "0")}"
 }
 
 output "vpc_enable_classiclink" {
   description = "Whether or not the VPC has Classiclink enabled."
-  value       = "${element(concat(aws_vpc.this.*.enable_classiclink, list("")), 0)}"
+  value       = "${element(concat(aws_vpc.this.*.enable_classiclink, list("")), "0")}"
 }
 
 output "vpc_multi_tier" {
@@ -60,22 +60,22 @@ output "vpc_multi_tier" {
 
 output "vpc_main_route_table_id" {
   description = "The ID of the main route table associated with this VPC."
-  value       = "${element(concat(aws_vpc.this.*.main_route_table_id, list("")), 0)}"
+  value       = "${element(concat(aws_vpc.this.*.main_route_table_id, list("")), "0")}"
 }
 
 output "vpc_default_network_acl_id" {
   description = "The ID of the network ACL created by default on VPC creation."
-  value       = "${element(concat(aws_vpc.this.*.default_network_acl_id, list("")), 0)}"
+  value       = "${element(concat(aws_vpc.this.*.default_network_acl_id, list("")), "0")}"
 }
 
 output "vpc_default_security_group_id" {
   description = "The ID of the security group created by default on VPC creation."
-  value       = "${element(concat(aws_vpc.this.*.default_security_group_id, list("")), 0)}"
+  value       = "${element(concat(aws_vpc.this.*.default_security_group_id, list("")), "0")}"
 }
 
 output "vpc_default_route_table_id" {
   description = "The ID of the route table created by default on VPC creation."
-  value       = "${element(concat(aws_vpc.this.*.default_route_table_id, list("")), 0)}"
+  value       = "${element(concat(aws_vpc.this.*.default_route_table_id, list("")), "0")}"
 }
 
 output "subnet_public_ids" {
@@ -110,27 +110,27 @@ output "subnet_data_cidr_blocks" {
 
 output "db_subnet_group_name" {
   description = "The db subnet group name."
-  value       = "${element(concat(aws_db_subnet_group.this.*.id, list("")), 0)}"
+  value       = "${element(concat(aws_db_subnet_group.this.*.id, list("")), "0")}"
 }
 
 output "db_subnet_group_arn" {
   description = "The ARN of the db subnet group."
-  value       = "${element(concat(aws_db_subnet_group.this.*.arn, list("")), 0)}"
+  value       = "${element(concat(aws_db_subnet_group.this.*.arn, list("")), "0")}"
 }
 
 output "elasticache_subnet_group_name" {
   description = "The elasticache subnet group name."
-  value       = "${element(concat(aws_elasticache_subnet_group.this.*.name, list("")), 0)}"
+  value       = "${element(concat(aws_elasticache_subnet_group.this.*.name, list("")), "0")}"
 }
 
 output "redshift_subnet_group_id" {
   description = "The Redshift Subnet group ID."
-  value       = "${element(concat(aws_redshift_subnet_group.this.*.id, list("")), 0)}"
+  value       = "${element(concat(aws_redshift_subnet_group.this.*.id, list("")), "0")}"
 }
 
 output "igw_id" {
   description = "The ID of the Internet Gateway."
-  value       = "${element(concat(aws_internet_gateway.this.*.id, list("")), 0)}"
+  value       = "${element(concat(aws_internet_gateway.this.*.id, list("")), "0")}"
 }
 
 output "eip_nat_ids" {
@@ -160,7 +160,7 @@ output "nat_private_ips" {
 
 output "rtb_public_id" {
   description = "ID of public route table"
-  value       = "${element(concat(aws_route_table.public.*.id, list("")), 0)}"
+  value       = "${element(concat(aws_route_table.public.*.id, list("")), "0")}"
 }
 
 output "rtb_app_ids" {
@@ -175,12 +175,12 @@ output "rtb_data_ids" {
 
 output "vpce_s3_id" {
   description = "The ID of VPC endpoint for S3"
-  value       = "${element(concat(aws_vpc_endpoint.s3.*.id, list("")), 0)}"
+  value       = "${element(concat(aws_vpc_endpoint.s3.*.id, list("")), "0")}"
 }
 
 output "vpce_s3_prefix_list_id" {
   description = "The prefix list for the S3 VPC endpoint."
-  value       = "${element(concat(aws_vpc_endpoint.s3.*.prefix_list_id, list("")), 0)}"
+  value       = "${element(concat(aws_vpc_endpoint.s3.*.prefix_list_id, list("")), "0")}"
 }
 
 output "vpce_s3_cidr_blocks" {
@@ -190,12 +190,12 @@ output "vpce_s3_cidr_blocks" {
 
 output "vpce_dynamodb_id" {
   description = "The ID of VPC endpoint for DynamoDB"
-  value       = "${element(concat(aws_vpc_endpoint.dynamodb.*.id, list("")), 0)}"
+  value       = "${element(concat(aws_vpc_endpoint.dynamodb.*.id, list("")), "0")}"
 }
 
 output "vpce_dynamodb_prefix_list_id" {
   description = "The prefix list for the DynamoDB VPC endpoint."
-  value       = "${element(concat(aws_vpc_endpoint.dynamodb.*.prefix_list_id, list("")), 0)}"
+  value       = "${element(concat(aws_vpc_endpoint.dynamodb.*.prefix_list_id, list("")), "0")}"
 }
 
 output "vpce_dynamodb_cidr_blocks" {
@@ -205,32 +205,32 @@ output "vpce_dynamodb_cidr_blocks" {
 
 output "flow_logs_log_group_arn" {
   description = "The Amazon Resource Name (ARN) specifying the log group for VPC Flow Logs."
-  value       = "${element(concat(aws_cloudwatch_log_group.flow_logs.*.arn, list("")), 0)}"
+  value       = "${element(concat(aws_cloudwatch_log_group.flow_logs.*.arn, list("")), "0")}"
 }
 
 output "flow_logs_iam_role_name" {
   description = "The name of the role for VPC Flow Logs."
-  value       = "${element(concat(aws_iam_role.flow_logs.*.name, list("")), 0)}"
+  value       = "${element(concat(aws_iam_role.flow_logs.*.name, list("")), "0")}"
 }
 
 output "flow_logs_iam_role_arn" {
   description = "The Amazon Resource Name (ARN) specifying the role for VPC Flow Logs."
-  value       = "${element(concat(aws_iam_role.flow_logs.*.arn, list("")), 0)}"
+  value       = "${element(concat(aws_iam_role.flow_logs.*.arn, list("")), "0")}"
 }
 
 output "flow_logs_iam_role_description" {
   description = "The description of the role for VPC Flow Logs."
-  value       = "${element(concat(aws_iam_role.flow_logs.*.description, list("")), 0)}"
+  value       = "${element(concat(aws_iam_role.flow_logs.*.description, list("")), "0")}"
 }
 
 output "flow_logs_iam_role_create_date" {
   description = "The creation date of the IAM role for VPC Flow Logs."
-  value       = "${element(concat(aws_iam_role.flow_logs.*.create_date, list("")), 0)}"
+  value       = "${element(concat(aws_iam_role.flow_logs.*.create_date, list("")), "0")}"
 }
 
 output "flow_logs_iam_role_unique_id" {
   description = "The stable and unique string identifying the role for VPC Flow Logs."
-  value       = "${element(concat(aws_iam_role.flow_logs.*.unique_id, list("")), 0)}"
+  value       = "${element(concat(aws_iam_role.flow_logs.*.unique_id, list("")), "0")}"
 }
 
 # In case you are wondering why there are so many ugly interpolation: 

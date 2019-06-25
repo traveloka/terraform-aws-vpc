@@ -1,28 +1,28 @@
 # This module was created using terraform 0.11.4 at 2018/03/21.
 terraform {
-  required_version = "~> 0.11.4"
+  required_version = ">= 0.11.4, < 0.12.0"
 }
 
 provider "random" {
-  version = "~> 1.1"
+  version = ">= 1.2.0, < 3.0.0"
 }
 
 # Contains local values that are used to increase DRYness of the code.
 locals {
-  max_byte_length = 8 # max bytes of random id to use as unique suffix. 16 hex chars, each byte takes 2 hex chars
+  max_byte_length = "8" # max bytes of random id to use as unique suffix. 16 hex chars, each byte takes 2 hex chars
 
   ## Cloudwatch Log Group for VPC Flow Logs
-  log_group_name_max_length      = 512
+  log_group_name_max_length      = "512"
   log_group_name_format          = "/aws/vpc-flow-logs/%s-"
   log_group_name_prefix          = "${format(local.log_group_name_format, var.vpc_name)}"
-  log_group_name_max_byte_length = "${(local.log_group_name_max_length - length(local.log_group_name_prefix)) / 2}"
+  log_group_name_max_byte_length = "${(local.log_group_name_max_length - length(local.log_group_name_prefix)) / "2"}"
   log_group_name_byte_length     = "${min(local.max_byte_length, local.log_group_name_max_byte_length)}"
 
   ## IAM Role for VPC Flow Logs
-  role_name_max_length      = 64
+  role_name_max_length      = "64"
   role_name_format          = "ServiceRoleForVPCFlowLogs_%s-"
   role_name_prefix          = "${format(local.role_name_format, var.vpc_name)}"
-  role_name_max_byte_length = "${(local.role_name_max_length - length(local.role_name_prefix)) / 2}"
+  role_name_max_byte_length = "${(local.role_name_max_length - length(local.role_name_prefix)) / "2"}"
   role_name_byte_length     = "${min(local.max_byte_length, local.role_name_max_byte_length)}"
 }
 
@@ -39,7 +39,7 @@ resource "aws_vpc" "this" {
   enable_dns_support   = "${var.vpc_enable_dns_support}"
   enable_dns_hostnames = "${var.vpc_enable_dns_hostnames}"
 
-  tags {
+  tags = {
     Name          = "${var.vpc_name}"
     MultiTier     = "${var.vpc_multi_tier ? "true" : "false"}"
     ProductDomain = "${var.product_domain}"
@@ -55,12 +55,12 @@ resource "aws_subnet" "public" {
   count = "${length(var.subnet_availability_zones)}"
 
   availability_zone       = "${element(var.subnet_availability_zones, count.index)}"
-  cidr_block              = "${cidrsubnet(var.vpc_cidr_block, 4, count.index)}"
-  map_public_ip_on_launch = true
+  cidr_block              = "${cidrsubnet(var.vpc_cidr_block, "4", count.index)}"
+  map_public_ip_on_launch = "true"
   vpc_id                  = "${aws_vpc.this.id}"
 
-  tags {
-    Name          = "${var.vpc_name}-public-${substr(element(var.subnet_availability_zones, count.index), -1, 1)}"
+  tags = {
+    Name          = "${var.vpc_name}-public-${substr(element(var.subnet_availability_zones, count.index), "-1", "1")}"
     Tier          = "public"
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
@@ -73,14 +73,14 @@ resource "aws_subnet" "public" {
 # One for each AZ.
 # Only created when the VPC is multi-tier.
 resource "aws_subnet" "app" {
-  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : 0}"
+  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : "0"}"
 
   availability_zone = "${element(var.subnet_availability_zones, count.index)}"
-  cidr_block        = "${cidrsubnet(var.vpc_cidr_block, 3, count.index + 4)}"
+  cidr_block        = "${cidrsubnet(var.vpc_cidr_block, "3", count.index + "4")}"
   vpc_id            = "${aws_vpc.this.id}"
 
-  tags {
-    Name          = "${var.vpc_name}-app-${substr(element(var.subnet_availability_zones, count.index), -1, 1)}"               # vpc_name="dev"; availability_zone="ap-southeast-1a; Name="dev-app-a"
+  tags = {
+    Name          = "${var.vpc_name}-app-${substr(element(var.subnet_availability_zones, count.index), "-1", "1")}"           # vpc_name="dev"; availability_zone="ap-southeast-1a; Name="dev-app-a"
     Tier          = "app"
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
@@ -93,14 +93,14 @@ resource "aws_subnet" "app" {
 # One for each AZ.
 # Only created when the VPC is multi-tier.
 resource "aws_subnet" "data" {
-  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : 0}"
+  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : "0"}"
 
   availability_zone = "${element(var.subnet_availability_zones, count.index)}"
-  cidr_block        = "${cidrsubnet(var.vpc_cidr_block, 4, count.index + 4)}"
+  cidr_block        = "${cidrsubnet(var.vpc_cidr_block, "4", count.index + "4")}"
   vpc_id            = "${aws_vpc.this.id}"
 
-  tags {
-    Name          = "${var.vpc_name}-data-${substr(element(var.subnet_availability_zones, count.index), -1, 1)}"
+  tags = {
+    Name          = "${var.vpc_name}-data-${substr(element(var.subnet_availability_zones, count.index), "-1", "1")}"
     Tier          = "data"
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
@@ -112,13 +112,13 @@ resource "aws_subnet" "data" {
 # Provides an RDS DB subnet group resource.
 # Only created when the VPC is multi-tier.
 resource "aws_db_subnet_group" "this" {
-  count = "${var.vpc_multi_tier ? 1 : 0}"
+  count = "${var.vpc_multi_tier ? "1" : "0"}"
 
   name        = "${var.vpc_name}-default-db-subnet-group"
   description = "Default DB Subnet Group on ${var.vpc_name} VPC"
-  subnet_ids  = ["${aws_subnet.data.*.id}"]
+  subnet_ids  = ["${aws_subnet.data.*.id}"]                      # For terraform 0.12 this line should be changed to aws_subnet.data[*].id
 
-  tags {
+  tags = {
     Name          = "${var.vpc_name}-default-db-subnet-group"
     Tier          = "data"
     ProductDomain = "${var.product_domain}"
@@ -131,23 +131,23 @@ resource "aws_db_subnet_group" "this" {
 # Provides an ElastiCache Subnet Group resource.
 # Only created when the VPC is multi-tier.
 resource "aws_elasticache_subnet_group" "this" {
-  count = "${var.vpc_multi_tier ? 1 : 0}"
+  count = "${var.vpc_multi_tier ? "1" : "0"}"
 
   name        = "${var.vpc_name}-default-elasticache-subnet-group"
   description = "Default Elasticache Subnet Group on ${var.vpc_name} VPC"
-  subnet_ids  = ["${aws_subnet.data.*.id}"]
+  subnet_ids  = ["${aws_subnet.data.*.id}"]                               # For terraform 0.12 this line should be changed to aws_subnet.data[*].id
 }
 
 # Creates a new Amazon Redshift subnet group.
 # Only created when the VPC is multi-tier.
 resource "aws_redshift_subnet_group" "this" {
-  count = "${var.vpc_multi_tier ? 1 : 0}"
+  count = "${var.vpc_multi_tier ? "1" : "0"}"
 
   name        = "${var.vpc_name}-default-redshift-subnet-group"
   description = "Default Redshift Subnet Group on ${var.vpc_name} VPC"
-  subnet_ids  = ["${aws_subnet.data.*.id}"]
+  subnet_ids  = ["${aws_subnet.data.*.id}"]                            # For terraform 0.12 this line should be changed to aws_subnet.data[*].id
 
-  tags {
+  tags = {
     Name          = "${var.vpc_name}-default-redshift-subnet-group"
     Tier          = "data"
     ProductDomain = "${var.product_domain}"
@@ -174,12 +174,12 @@ resource "aws_internet_gateway" "this" {
 # One for each AZ.
 # Only created when the VPC is multi-tier.
 resource "aws_eip" "nat" {
-  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : 0}"
+  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : "0"}"
 
-  vpc = true
+  vpc = "true"
 
   tags = {
-    Name          = "${var.vpc_name}-eipalloc-${substr(element(var.subnet_availability_zones, count.index), -1, 1)}"
+    Name          = "${var.vpc_name}-eipalloc-${substr(element(var.subnet_availability_zones, count.index), "-1", "1")}"
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
     Description   = "NAT Gateway's Elastic IP for ${element(var.subnet_availability_zones, count.index)} AZ on ${var.vpc_name} VPC"
@@ -191,7 +191,7 @@ resource "aws_eip" "nat" {
 # One for each AZ.
 # Only created when the VPC is multi-tier.
 resource "aws_nat_gateway" "this" {
-  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : 0}"
+  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : "0"}"
 
   allocation_id = "${element(aws_eip.nat.*.id, count.index)}"
   subnet_id     = "${element(aws_subnet.public.*.id, count.index)}"
@@ -204,7 +204,7 @@ resource "aws_nat_gateway" "this" {
   }
 
   tags = {
-    Name          = "${var.vpc_name}-nat-${substr(element(var.subnet_availability_zones, count.index), -1, 1)}"
+    Name          = "${var.vpc_name}-nat-${substr(element(var.subnet_availability_zones, count.index), "-1", "1")}"
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
     Description   = "NAT Gateway for ${element(var.subnet_availability_zones, count.index)} AZ on ${var.vpc_name} VPC"
@@ -216,7 +216,7 @@ resource "aws_nat_gateway" "this" {
 resource "aws_default_route_table" "this" {
   default_route_table_id = "${aws_vpc.this.default_route_table_id}"
 
-  tags {
+  tags = {
     Name          = "${var.vpc_name}-default-rtb"
     Tier          = "default"
     ProductDomain = "${var.product_domain}"
@@ -267,12 +267,12 @@ resource "aws_route_table_association" "public" {
 # One for each AZ.
 # Only created when the VPC is multi-tier.
 resource "aws_route_table" "app" {
-  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : 0}"
+  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : "0"}"
 
   vpc_id = "${aws_vpc.this.id}"
 
   tags = {
-    Name          = "${var.vpc_name}-app-rtb-${substr(element(var.subnet_availability_zones, count.index), -1, 1)}"
+    Name          = "${var.vpc_name}-app-rtb-${substr(element(var.subnet_availability_zones, count.index), "-1", "1")}"
     Tier          = "app"
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
@@ -285,7 +285,7 @@ resource "aws_route_table" "app" {
 # One for each AZ.
 # Only created when the VPC is multi-tier.
 resource "aws_route" "app" {
-  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : 0}"
+  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : "0"}"
 
   route_table_id         = "${element(aws_route_table.app.*.id, count.index)}"
   destination_cidr_block = "0.0.0.0/0"
@@ -296,7 +296,7 @@ resource "aws_route" "app" {
 # One for each AZ.
 # Only created when the VPC is multi-tier.
 resource "aws_route_table_association" "app" {
-  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : 0}"
+  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : "0"}"
 
   subnet_id      = "${element(aws_subnet.app.*.id, count.index)}"
   route_table_id = "${element(aws_route_table.app.*.id, count.index)}"
@@ -312,12 +312,12 @@ resource "aws_route_table_association" "app" {
 # One for each AZ.
 # Only created when the VPC is multi-tier.
 resource "aws_route_table" "data" {
-  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : 0}"
+  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : "0"}"
 
   vpc_id = "${aws_vpc.this.id}"
 
   tags = {
-    Name          = "${var.vpc_name}-data-rtb-${substr(element(var.subnet_availability_zones, count.index), -1, 1)}"
+    Name          = "${var.vpc_name}-data-rtb-${substr(element(var.subnet_availability_zones, count.index), "-1", "1")}"
     Tier          = "data"
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
@@ -330,7 +330,7 @@ resource "aws_route_table" "data" {
 # One for each AZ.
 # Only created when the VPC is multi-tier.
 resource "aws_route" "data" {
-  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : 0}"
+  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : "0"}"
 
   route_table_id         = "${element(aws_route_table.data.*.id, count.index)}"
   destination_cidr_block = "0.0.0.0/0"
@@ -341,7 +341,7 @@ resource "aws_route" "data" {
 # One for each AZ.
 # Only created when the VPC is multi-tier.
 resource "aws_route_table_association" "data" {
-  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : 0}"
+  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : "0"}"
 
   subnet_id      = "${element(aws_subnet.data.*.id, count.index)}"
   route_table_id = "${element(aws_route_table.data.*.id, count.index)}"
@@ -369,7 +369,7 @@ resource "aws_vpc_endpoint_route_table_association" "s3_public" {
 # One for each AZ.
 # Only created when the VPC is multi-tier.
 resource "aws_vpc_endpoint_route_table_association" "s3_app" {
-  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : 0}"
+  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : "0"}"
 
   vpc_endpoint_id = "${aws_vpc_endpoint.s3.id}"
   route_table_id  = "${element(aws_route_table.app.*.id, count.index)}"
@@ -385,7 +385,7 @@ resource "aws_vpc_endpoint_route_table_association" "s3_app" {
 # One for each AZ.
 # Only created when the VPC is multi-tier.
 resource "aws_vpc_endpoint_route_table_association" "s3_data" {
-  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : 0}"
+  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : "0"}"
 
   vpc_endpoint_id = "${aws_vpc_endpoint.s3.id}"
   route_table_id  = "${element(aws_route_table.data.*.id, count.index)}"
@@ -413,7 +413,7 @@ resource "aws_vpc_endpoint_route_table_association" "dynamodb_public" {
 # One for each AZ.
 # Only created when the VPC is multi-tier.
 resource "aws_vpc_endpoint_route_table_association" "dynamodb_app" {
-  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : 0}"
+  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : "0"}"
 
   vpc_endpoint_id = "${aws_vpc_endpoint.dynamodb.id}"
   route_table_id  = "${element(aws_route_table.app.*.id, count.index)}"
@@ -429,7 +429,7 @@ resource "aws_vpc_endpoint_route_table_association" "dynamodb_app" {
 # One for each AZ.
 # Only created when the VPC is multi-tier.
 resource "aws_vpc_endpoint_route_table_association" "dynamodb_data" {
-  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : 0}"
+  count = "${var.vpc_multi_tier ? length(var.subnet_availability_zones) : "0"}"
 
   vpc_endpoint_id = "${aws_vpc_endpoint.dynamodb.id}"
   route_table_id  = "${element(aws_route_table.data.*.id, count.index)}"
@@ -445,7 +445,7 @@ resource "aws_vpc_endpoint_route_table_association" "dynamodb_data" {
 resource "aws_default_vpc_dhcp_options" "this" {
   depends_on = ["aws_vpc.this"]
 
-  tags {
+  tags = {
     Name          = "${var.vpc_name}-default-dopt"
     ProductDomain = "${var.product_domain}"
     Environment   = "${var.environment}"
@@ -459,21 +459,21 @@ resource "aws_default_network_acl" "this" {
   default_network_acl_id = "${aws_vpc.this.default_network_acl_id}"
 
   ingress {
-    protocol   = -1
-    rule_no    = 100
+    protocol   = "-1"
+    rule_no    = "100"
     action     = "allow"
     cidr_block = "0.0.0.0/0"
-    from_port  = 0
-    to_port    = 0
+    from_port  = "0"
+    to_port    = "0"
   }
 
   egress {
-    protocol   = -1
-    rule_no    = 100
+    protocol   = "-1"
+    rule_no    = "100"
     action     = "allow"
     cidr_block = "0.0.0.0/0"
-    from_port  = 0
-    to_port    = 0
+    from_port  = "0"
+    to_port    = "0"
   }
 
   tags = {
@@ -506,11 +506,11 @@ resource "aws_default_security_group" "this" {
 
 # Generates an IAM policy document in JSON format for VPC Flow Logs Trust Relationship Policy.
 data "aws_iam_policy_document" "flow_logs_trust_policy" {
-  statement = {
+  statement {
     sid     = "AllowFlowLogsToAssumeRole"
     actions = ["sts:AssumeRole"]
 
-    principals = {
+    principals {
       type        = "Service"
       identifiers = ["vpc-flow-logs.amazonaws.com"]
     }
@@ -554,7 +554,7 @@ resource "aws_cloudwatch_log_group" "flow_logs" {
 
 # Generates an IAM policy document in JSON format for VPC Flow Logs Role Permission.
 data "aws_iam_policy_document" "flow_logs_permission_policy" {
-  statement = {
+  statement {
     sid = "AllowWritingToLogStreams"
 
     actions = [
@@ -580,10 +580,10 @@ resource "aws_iam_role_policy" "flow_logs" {
 
 # Provides a VPC Flow Log to capture IP traffic for a VPC.
 resource "aws_flow_log" "this" {
-  log_destination = "${aws_cloudwatch_log_group.flow_logs.name}"
-  iam_role_arn    = "${aws_iam_role.flow_logs.arn}"
-  vpc_id          = "${aws_vpc.this.id}"
-  traffic_type    = "ALL"
+  log_group_name = "${aws_cloudwatch_log_group.flow_logs.name}"
+  iam_role_arn   = "${aws_iam_role.flow_logs.arn}"
+  vpc_id         = "${aws_vpc.this.id}"
+  traffic_type   = "ALL"
 
   depends_on = ["aws_iam_role_policy.flow_logs"]
 }

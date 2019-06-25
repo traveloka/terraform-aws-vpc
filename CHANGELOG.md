@@ -1,14 +1,14 @@
-## v0.3.0 (Unreleased)
+## v0.2.3 (June 30, 2019)
 
-NOTES:
+BUG FIXES:
 
-* This module is now compatible with Terraform 0.12 version. That being said, one can still use this module on previous version of Terraform (0.11). The reason behind that is because the syntax is not using Terraform 0.12's style yet.
+* change `ManagedBy` tag value from `Terraform` to `terraform`
 
 ## v0.2.2 (May 29, 2019)
 
 ENHANCEMENT:
 
-* Terraform provider version relaxed for preparation to 0.12 compatibility
+* Terraform provider version relaxed for preparation to 0.12 compatibility. Note: means that it is not working on Terraform 0.12 yet
 
 ## v0.2.1 (Sep 14, 2018)
 
@@ -20,7 +20,9 @@ BUG FIXES:
 
 FEATURES:
 
-* **New Resource:** Automatically create DB Subnet Group, Elasticache Subnet Group, and Redshift Subnet Group
+* **New Resource:** DB Subnet Group
+* **New Resource:** Elasticache Subnet Group
+* **New Resource:** Redshift Subnet Group
 
 ## v0.1.0 (Apr 3, 2018)
 
