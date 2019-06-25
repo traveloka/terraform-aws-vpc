@@ -4,7 +4,7 @@ terraform {
 }
 
 provider "random" {
-  version = ">= 1.2.0, < 3.0.0"
+  version = ">= 1.1, < 3.0.0"
 }
 
 # Contains local values that are used to increase DRYness of the code.
