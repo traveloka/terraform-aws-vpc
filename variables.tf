@@ -48,3 +48,8 @@ variable "flow_logs_log_group_retention_period" {
   description = "Specifies the number of days you want to retain log events in the specified log group."
   default     = "14"
 }
+
+variable "tags" {
+  description = "A map of tags to add to all resources"
+  default     = {}
+}
