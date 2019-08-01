@@ -28,7 +28,7 @@ locals {
   common_tags = "${merge(
     map("ProductDomain", var.product_domain), 
     map("Environment", var.environment), 
-    map("ManagedBy", "Terraform"), 
+    map("ManagedBy", "terraform"), 
     var.tags)}"
 }
 
@@ -48,7 +48,7 @@ resource "aws_vpc" "this" {
   tags = "${merge(
     map("Name", var.vpc_name),
     map("MultiTier", var.vpc_multi_tier ? "true" : "false"), 
-    map("Description", format("%s VPC for %s", var.environment, var.product_domain)), 
+    map("Description", format("%s VPC for %s product domain", var.environment, var.product_domain)), 
     local.common_tags)}"
 }
 
