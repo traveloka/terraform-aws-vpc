@@ -208,7 +208,7 @@ resource "aws_route_table" "public" {
   vpc_id = "${aws_vpc.this.id}"
 
   tags = "${merge(
-    map("Name", format("%s-default-public", var.vpc_name)),
+    map("Name", format("%s-public-public", var.vpc_name)),
     map("Tier", "public"),
     map("Description", format("Route table for public subnet on %s VPC", var.vpc_name)), 
     local.common_tags)}"
