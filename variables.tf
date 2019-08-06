@@ -49,7 +49,7 @@ variable "flow_logs_log_group_retention_period" {
   default     = "14"
 }
 
-variable "tags" {
-  description = "A map of tags to add to all resources"
+variable "additional_tags" {
+  description = "A map of additional tags to add to all resources"
   default     = {}
 }
