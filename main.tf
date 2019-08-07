@@ -26,7 +26,7 @@ locals {
   role_name_byte_length     = "${min(local.max_byte_length, local.role_name_max_byte_length)}"
 
   common_tags = "${merge(
-    var.additional_tags
+    var.additional_tags,
     map("ProductDomain", var.product_domain), 
     map("Environment", var.environment), 
     map("ManagedBy", "terraform"))}"
