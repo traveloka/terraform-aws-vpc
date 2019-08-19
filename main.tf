@@ -65,7 +65,7 @@ resource "aws_subnet" "public" {
 
   tags = "${merge(
     local.common_tags,
-    var.additional_public_tags,
+    var.additional_public_subnet_tags,
     map("Name", format("%s-public-%s", var.vpc_name, substr(element(var.subnet_availability_zones, count.index), -1, 1))),
     map("Tier", "public"), 
     map("Description", format("Public subnet for %s AZ on %s VPC", element(var.subnet_availability_zones, count.index), var.vpc_name)))}"
@@ -83,7 +83,7 @@ resource "aws_subnet" "app" {
 
   tags = "${merge(
     local.common_tags,
-    var.additional_app_tags,
+    var.additional_app_subnet_tags,
     map("Name", format("%s-app-%s", var.vpc_name, substr(element(var.subnet_availability_zones, count.index), -1, 1))),
     map("Tier", "app"), 
     map("Description", format("Application subnet for %s AZ on %s VPC", element(var.subnet_availability_zones, count.index), var.vpc_name)))}"
@@ -101,7 +101,7 @@ resource "aws_subnet" "data" {
 
   tags = "${merge(
     local.common_tags,
-    var.additional_data_tags,
+    var.additional_data_subnet_tags,
     map("Name", format("%s-data-%s", var.vpc_name, substr(element(var.subnet_availability_zones, count.index), -1, 1))),
     map("Tier", "data"), 
     map("Description", format("Data subnet for %s AZ on %s VPC", element(var.subnet_availability_zones, count.index), var.vpc_name)))}"
