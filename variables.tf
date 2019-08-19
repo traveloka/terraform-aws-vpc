@@ -53,3 +53,23 @@ variable "additional_tags" {
   description = "A map of additional tags to add to all resources"
   default     = {}
 }
+
+variable "additional_vpc_tags" {
+  description = "A map of additional tags to add to the vpc"
+  default     = {}
+}
+
+variable "additional_public_subnet_tags" {
+  description = "A map of additional tags to add to the public subnet"
+  default     = {}
+}
+
+variable "additional_app_subnet_tags" {
+  description = "A map of additional tags to add to the application subnet"
+  default     = {}
+}
+
+variable "additional_data_subnet_tags" {
+  description = "A map of additional tags to add to the data subnet"
+  default     = {}
+}

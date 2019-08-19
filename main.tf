@@ -47,6 +47,7 @@ resource "aws_vpc" "this" {
 
   tags = "${merge(
     local.common_tags,
+    var.additional_vpc_tags,
     map("Name", var.vpc_name),
     map("MultiTier", var.vpc_multi_tier ? "true" : "false"), 
     map("Description", format("%s VPC for %s product domain", var.environment, var.product_domain)))}"
@@ -64,6 +65,7 @@ resource "aws_subnet" "public" {
 
   tags = "${merge(
     local.common_tags,
+    var.additional_public_tags,
     map("Name", format("%s-public-%s", var.vpc_name, substr(element(var.subnet_availability_zones, count.index), -1, 1))),
     map("Tier", "public"), 
     map("Description", format("Public subnet for %s AZ on %s VPC", element(var.subnet_availability_zones, count.index), var.vpc_name)))}"
@@ -81,6 +83,7 @@ resource "aws_subnet" "app" {
 
   tags = "${merge(
     local.common_tags,
+    var.additional_app_tags,
     map("Name", format("%s-app-%s", var.vpc_name, substr(element(var.subnet_availability_zones, count.index), -1, 1))),
     map("Tier", "app"), 
     map("Description", format("Application subnet for %s AZ on %s VPC", element(var.subnet_availability_zones, count.index), var.vpc_name)))}"
@@ -98,6 +101,7 @@ resource "aws_subnet" "data" {
 
   tags = "${merge(
     local.common_tags,
+    var.additional_data_tags,
     map("Name", format("%s-data-%s", var.vpc_name, substr(element(var.subnet_availability_zones, count.index), -1, 1))),
     map("Tier", "data"), 
     map("Description", format("Data subnet for %s AZ on %s VPC", element(var.subnet_availability_zones, count.index), var.vpc_name)))}"
