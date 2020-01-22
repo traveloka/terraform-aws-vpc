@@ -56,6 +56,10 @@ At the moment, this module is not supported on Terraform 0.12
 
 * [Multi-Tier VPC](https://github.com/traveloka/terraform-aws-vpc/tree/master/examples/multi-tier)
 
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
 ## Author
 
 * [Rafi Kurnia Putra](https://github.com/rafikurnia)
