@@ -1,11 +1,38 @@
 # terraform-aws-vpc
 
+[![Terraform Version](https://img.shields.io/badge/Terraform%20Version-0.11.14-blue.svg)](https://releases.hashicorp.com/terraform/)
+[![Release](https://img.shields.io/github/release/traveloka/terraform-aws-vpc.svg)](https://github.com/traveloka/terraform-aws-vpc/releases)
+[![Last Commit](https://img.shields.io/github/last-commit/traveloka/terraform-aws-vpc.svg)](https://github.com/traveloka/terraform-aws-vpc/commits/master)
+[![Issues](https://img.shields.io/github/issues/traveloka/terraform-aws-vpc.svg)](https://github.com/traveloka/terraform-aws-vpc/issues)
+[![Pull Requests](https://img.shields.io/github/issues-pr/traveloka/terraform-aws-vpc.svg)](https://github.com/traveloka/terraform-aws-vpc/pulls)
+[![License](https://img.shields.io/github/license/traveloka/terraform-aws-vpc.svg)](https://github.com/traveloka/terraform-aws-vpc/blob/master/LICENSE)
+![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.png?v=103)
+
+## Table of Content
+
+- [Prerequisites](#Prerequisites)
+- [Quick Start](#Quick-Start)
+- [Dependencies](#Dependencies)
+- [Contributing](#Contributing)
+- [Contributor](#Contributor)
+- [License](#License)
+- [Acknowledgments](#Acknowledgments)
+
+## Prerequisites
+
+- [Terraform](https://releases.hashicorp.com/terraform/). This module currently tested on `0.11.14`
+- [awsudo](https://github.com/makethunder/awsudo) to assume role in AWS
+- [Visual Studio Code](https://code.visualstudio.com/download) is the best editor for the [Terraform Extension](https://marketplace.visualstudio.com/items?itemName=mauve.terraform). After install activate auto format by go to `File`→`Preferences`→`Settings`. Choose`Text Editor`→`Formatting` and check `Format on Save`
+- `SuperAdmin` role, or role with VPC administrator access (read-write)
+
+
+## Quick Start
 Terraform module to create all mandatory VPC components.
 
 This module supports either single-tier (only public subnet) or multi-tier (public-app-data subnets) VPC creation.
 This module supports only up to 4 AZs.
 
-## Usage
+### Multi-Tier VPC
 
 ```hcl
 module "abc_dev" {
@@ -19,6 +46,18 @@ module "abc_dev" {
   vpc_cidr_block = "172.16.0.0/16"
 }
 ```
+
+We use multi-tier architecture for our VPC design. This design divides the infrastructure into three layers: 
+- Public tier: entrypoint for public-facing client. Using public subnet since resources in this tier will be discoverable through Internet. Examples: external load balancer, bastion, etc.
+- Application Tier: this is where the business logic services life and communicate each others. This tier using private subnet, hence it's only accessible through private network.
+- Database Tier: this is where databases life. Application and databases are seperated to have clear boundaries and secure access through application tier.
+
+Benefits or having multi-tier architecture are:
+- Scalable
+- Gives us high availability and redundancy
+- Fit with microservices architecture
+- Clear boundaries between public-facing, business logic, and data storage
+- Secure and reduce risk, because by default any services life at private subnet, and database only accessible through the application tier.
 
 ### Single-Tier VPC
 
@@ -42,19 +81,12 @@ Currrently Terraform does not allow `count` inside `output` block, so now it is 
 But don't worry, the errors have nothing to do with the stacks/resources/infrastructures that you created.
 Just re-execute `terraform apply` and you will be fine.
 
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md)
-
-## Terraform Version
-
-This module was created using Terraform 0.11.4. 
-Tested working on Terraform 0.11.14
-At the moment, this module is not supported on Terraform 0.12
-
-## Examples
+### Examples
 
 * [Multi-Tier VPC](https://github.com/traveloka/terraform-aws-vpc/tree/master/examples/multi-tier)
+
+### Module
+
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Providers
@@ -72,7 +104,7 @@ At the moment, this module is not supported on Terraform 0.12
 | environment | Type of environment these resources belong to. | `string` | n/a | yes |
 | flow\_logs\_log\_group\_retention\_period | Specifies the number of days you want to retain log events in the specified log group. | `string` | `"14"` | no |
 | product\_domain | Product domain these resources belong to. | `string` | n/a | yes |
-| subnet\_availability\_zones | List of AZs to spread VPC subnets over. | `list` | <pre>[<br>  "ap-southeast-1a",<br>  "ap-southeast-1b",<br>  "ap-southeast-1c"<br>]<br></pre> | no |
+| subnet\_availability\_zones | List of AZs to spread VPC subnets over. | `list` | <pre>[<br>  "ap-southeast-1a",<br>  "ap-souStheast-1b",<br>  "ap-southeast-1c"<br>]<br></pre> | no |
 | vpc\_cidr\_block | The CIDR block for the VPC. | `string` | n/a | yes |
 | vpc\_enable\_dns\_hostnames | A boolean flag to enable/disable DNS hostnames in the VPC. Defaults true. | `string` | `"true"` | no |
 | vpc\_enable\_dns\_support | A boolean flag to enable/disable DNS support in the VPC. Defaults true. | `string` | `"true"` | no |
@@ -133,10 +165,17 @@ At the moment, this module is not supported on Terraform 0.12
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
-## Author
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## Contributor
 
 * [Rafi Kurnia Putra](https://github.com/rafikurnia)
 
 ## License
 
 Apache 2 Licensed. See LICENSE for full details.
+
+## Acknowledgement
