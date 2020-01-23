@@ -21,10 +21,6 @@
 ## Prerequisites
 
 - [Terraform](https://releases.hashicorp.com/terraform/). This module currently tested on `0.11.14`
-- [awsudo](https://github.com/makethunder/awsudo) to assume role in AWS
-- [Visual Studio Code](https://code.visualstudio.com/download) is the best editor for the [Terraform Extension](https://marketplace.visualstudio.com/items?itemName=mauve.terraform). After install activate auto format by go to `File`→`Preferences`→`Settings`. Choose`Text Editor`→`Formatting` and check `Format on Save`
-- `SuperAdmin` role, or role with VPC administrator access (read-write)
-
 
 ## Quick Start
 Terraform module to create all mandatory VPC components.
@@ -169,10 +165,6 @@ Just re-execute `terraform apply` and you will be fine.
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md)
-
-## Contributor
-
-* [Rafi Kurnia Putra](https://github.com/rafikurnia)
 
 ## License
 
