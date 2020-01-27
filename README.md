@@ -1,6 +1,6 @@
 # terraform-aws-vpc
 
-[![Terraform Version](https://img.shields.io/badge/Terraform%20Version-0.11.14-blue.svg)](https://releases.hashicorp.com/terraform/)
+[![Terraform Version](https://img.shields.io/badge/Terraform%20Version->=0.11.14,_<0.12.0-blue.svg)](https://releases.hashicorp.com/terraform/)
 [![Release](https://img.shields.io/github/release/traveloka/terraform-aws-vpc.svg)](https://github.com/traveloka/terraform-aws-vpc/releases)
 [![Last Commit](https://img.shields.io/github/last-commit/traveloka/terraform-aws-vpc.svg)](https://github.com/traveloka/terraform-aws-vpc/commits/master)
 [![Issues](https://img.shields.io/github/issues/traveloka/terraform-aws-vpc.svg)](https://github.com/traveloka/terraform-aws-vpc/issues)
