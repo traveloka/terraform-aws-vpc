@@ -539,10 +539,10 @@ resource "aws_iam_role_policy" "flow_logs" {
 
 # Provides a VPC Flow Log to capture IP traffic for a VPC.
 resource "aws_flow_log" "this" {
-  log_group_name = "${aws_cloudwatch_log_group.flow_logs.name}"
-  iam_role_arn   = "${aws_iam_role.flow_logs.arn}"
-  vpc_id         = "${aws_vpc.this.id}"
-  traffic_type   = "ALL"
+  log_destination = "${aws_cloudwatch_log_group.flow_logs.arn}"
+  iam_role_arn    = "${aws_iam_role.flow_logs.arn}"
+  vpc_id          = "${aws_vpc.this.id}"
+  traffic_type    = "ALL"
 
   depends_on = ["aws_iam_role_policy.flow_logs"]
 }
