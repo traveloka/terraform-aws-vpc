@@ -7,6 +7,10 @@ provider "random" {
   version = ">= 1.1, < 3.0.0"
 }
 
+provider "aws" {
+  version = ">=1.42, < 3.0.0"
+}
+
 # Contains local values that are used to increase DRYness of the code.
 locals {
   max_byte_length = "8" # max bytes of random id to use as unique suffix. 16 hex chars, each byte takes 2 hex chars
