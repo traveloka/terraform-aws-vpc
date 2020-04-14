@@ -543,10 +543,69 @@ resource "aws_iam_role_policy" "flow_logs" {
 
 # Provides a VPC Flow Log to capture IP traffic for a VPC.
 resource "aws_flow_log" "this" {
-  log_destination = "${aws_cloudwatch_log_group.flow_logs.arn}"
-  iam_role_arn    = "${aws_iam_role.flow_logs.arn}"
-  vpc_id          = "${aws_vpc.this.id}"
-  traffic_type    = "ALL"
+  log_group_name = "${aws_cloudwatch_log_group.flow_logs.name}"
+  iam_role_arn   = "${aws_iam_role.flow_logs.arn}"
+  vpc_id         = "${aws_vpc.this.id}"
+  traffic_type   = "ALL"
 
   depends_on = ["aws_iam_role_policy.flow_logs"]
+}
+
+# Provides a VPC Flow Log to capture IP traffic for a VPC to S3 Bucket
+
+module "flowlogs_to_s3_naming" {
+  source        = "github.com/traveloka/terraform-aws-resource-naming.git?ref=v0.18.1"
+  name_prefix   = "${format("%s-flowlogs-%s", aws_vpc.this.id, data.aws_caller_identity.current.account_id)}"
+  resource_type = "s3_bucket"
+}
+
+resource "aws_s3_bucket" "flowlogs_to_s3" {
+  bucket = "${module.flowlogs_to_s3_naming.name}"
+  acl    = "private"
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
+  lifecycle_rule {
+    id      = "FlowLogsRetention"
+    enabled = "true"
+
+    expiration {
+      days = "${var.flowlogs_bucket_retention_in_days}"
+    }
+  }
+
+  tags = "${merge(
+    var.additional_tags,
+    map("ProductDomain", var.product_domain),
+    map("Environment", var.environment),
+    map("ManagedBy", "terraform"))
+  }"
+}
+
+resource "aws_s3_bucket_policy" "flowlogs_to_s3" {
+  bucket = "${aws_s3_bucket.flowlogs_to_s3.id}"
+  policy = "${data.aws_iam_policy_document.flowlogs_to_s3.json}"
+}
+
+resource "aws_flow_log" "flowlogs_to_s3" {
+  log_destination      = "${aws_s3_bucket.flowlogs_to_s3.arn}"
+  log_destination_type = "s3"
+  vpc_id               = "${aws_vpc.this.id}"
+  traffic_type         = "ALL"
+
+  max_aggregation_interval = "${var.flowlogs_max_aggregation_interval}"
+
+  tags = "${merge(
+    var.additional_tags,
+    map("Name", module.flowlogs_to_s3_naming.name),
+    map("ProductDomain", var.product_domain),
+    map("Environment", var.environment),
+    map("ManagedBy", "terraform"))
+  }"
 }

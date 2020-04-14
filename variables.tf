@@ -73,3 +73,13 @@ variable "additional_data_subnet_tags" {
   description = "A map of additional tags to add to the data subnet"
   default     = {}
 }
+
+variable "flowlogs_max_aggregation_interval" {
+  description = "FlowLogs Max Aggregation Interval"
+  default     = 600
+}
+
+variable "flowlogs_bucket_retention_in_days" {
+  description = "FlowLogs bucket retention (in days)"
+  default     = 14
+}
