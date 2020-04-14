@@ -591,6 +591,8 @@ resource "aws_s3_bucket" "flowlogs_to_s3" {
 resource "aws_s3_bucket_policy" "flowlogs_to_s3" {
   bucket = "${aws_s3_bucket.flowlogs_to_s3.id}"
   policy = "${data.aws_iam_policy_document.flowlogs_to_s3.json}"
+
+  depends_on = ["aws_s3_bucket.flowlogs_to_s3"]
 }
 
 resource "aws_flow_log" "flowlogs_to_s3" {
@@ -608,4 +610,6 @@ resource "aws_flow_log" "flowlogs_to_s3" {
     map("Environment", var.environment),
     map("ManagedBy", "terraform"))
   }"
+
+  depends_on = ["aws_s3_bucket.flowlogs_to_s3"]
 }
