@@ -203,36 +203,6 @@ output "vpce_dynamodb_cidr_blocks" {
   value       = "${flatten(aws_vpc_endpoint.dynamodb.*.cidr_blocks)}"
 }
 
-output "flow_logs_log_group_arn" {
-  description = "The Amazon Resource Name (ARN) specifying the log group for VPC Flow Logs."
-  value       = "${element(concat(aws_cloudwatch_log_group.flow_logs.*.arn, list("")), "0")}"
-}
-
-output "flow_logs_iam_role_name" {
-  description = "The name of the role for VPC Flow Logs."
-  value       = "${element(concat(aws_iam_role.flow_logs.*.name, list("")), "0")}"
-}
-
-output "flow_logs_iam_role_arn" {
-  description = "The Amazon Resource Name (ARN) specifying the role for VPC Flow Logs."
-  value       = "${element(concat(aws_iam_role.flow_logs.*.arn, list("")), "0")}"
-}
-
-output "flow_logs_iam_role_description" {
-  description = "The description of the role for VPC Flow Logs."
-  value       = "${element(concat(aws_iam_role.flow_logs.*.description, list("")), "0")}"
-}
-
-output "flow_logs_iam_role_create_date" {
-  description = "The creation date of the IAM role for VPC Flow Logs."
-  value       = "${element(concat(aws_iam_role.flow_logs.*.create_date, list("")), "0")}"
-}
-
-output "flow_logs_iam_role_unique_id" {
-  description = "The stable and unique string identifying the role for VPC Flow Logs."
-  value       = "${element(concat(aws_iam_role.flow_logs.*.unique_id, list("")), "0")}"
-}
-
 # In case you are wondering why there are so many ugly interpolation: 
 # https://github.com/hashicorp/terraform/issues/16726
 
