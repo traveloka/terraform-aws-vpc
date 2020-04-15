@@ -499,6 +499,11 @@ resource "aws_s3_bucket" "flowlogs_to_s3" {
     }
   }
 
+  logging {
+    target_bucket = "${var.s3_logging_bucket_name}"
+    target_prefix = "${module.flowlogs_to_s3_naming.name}/"
+  }
+
   tags = "${merge(
     var.additional_tags,
     map("ProductDomain", var.product_domain),
