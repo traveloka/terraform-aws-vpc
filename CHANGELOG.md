@@ -1,3 +1,21 @@
+## v0.5.0 (Apr 15, 2020)
+
+FEATURES:
+
+* Add new FlowLogs Using S3 as destination (#26)
+
+## v0.4.0 (Jan 28, 2020)
+
+ENHANCEMENTS:
+
+* Added `additional_vpc_tags`, `additional_public_subnet_tags`, `additional_app_subnet_tags`, `additional_data_subnet_tags` (#22)
+
+NOTES:
+
+* Add pre-commit terraform hooks for `terraform fmt` and `terraform-docs` (#24)
+* Update README to follow [terraform-aws-module-template](https://github.com/traveloka/terraform-aws-modules-template) (#24)
+
+
 ## v0.3.0 (Aug 7, 2019)
 
 ENHANCEMENTS:
