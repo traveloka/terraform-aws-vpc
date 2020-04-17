@@ -1,3 +1,10 @@
+## v0.6.0 (Apr 17, 2020)
+
+ENHANCEMENTS:
+
+* Add S3 bucket logging configuration for FlowLogs S3 bucket.
+
+
 ## v0.5.0 (Apr 15, 2020)
 
 FEATURES:
